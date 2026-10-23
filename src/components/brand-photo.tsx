@@ -5,17 +5,17 @@ import path from "node:path";
 // Only the exact founder-supplied files belong here. Never substitute stock imagery.
 const photographs = {
   kettlebells: {
-    file: "sebastian-kettlebells.jpg",
+    file: "VFN-Kettlebell-Hero (1).jpg",
     alt: "Sebastian Velasquez carrying kettlebells during training",
     label: "Founder carrying kettlebells",
   },
   portrait: {
-    file: "sebastian-portrait.jpg",
+    file: "Arise Professional -65.JPG",
     alt: "Sebastian Velasquez smiling with his arms crossed",
     label: "Sebastian’s smiling portrait",
   },
   panther: {
-    file: "panther.jpg",
+    file: "E8CC240A-59C3-482F-BFE8-D116CE373189.PNG",
     alt: "Black panther with golden eyes in a dark architectural interior",
     label: "The founder’s golden-eyed panther image",
   },
@@ -33,13 +33,13 @@ export function BrandPhoto({
 }) {
   const photo = photographs[kind];
   const available = existsSync(
-    path.join(process.cwd(), "public", "brand", photo.file),
+    path.join(process.cwd(), "public", "images", photo.file),
   );
   return (
     <div className={`brand-photo photo-${kind} ${className}`}>
       {available ? (
         <Image
-          src={`/brand/${photo.file}`}
+          src={`/images/${encodeURIComponent(photo.file)}`}
           alt={photo.alt}
           fill
           sizes={sizes}
