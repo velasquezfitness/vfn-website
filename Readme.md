@@ -40,22 +40,20 @@ For a local production preview, run `npm start -- --hostname 0.0.0.0` after buil
 The approved direction follows the founder’s supplied Framer hero reference: cinematic imagery, editorial serif headlines, restrained sans-serif navigation, and quiet text-link CTAs. Bright-yellow panels, repetitive cards, and the temporary vector-panther hero have been removed.
 
 - `src/content/site.ts`: founder background supplied in the master brief and the five method stages. No additional qualifications, years of experience, or results have been invented.
-- `src/components/brand-photo.tsx`: Next.js responsive image component for the three exact supplied assets. Hero photography is contained on desktop and presented separately from text on mobile to preserve the subject. Final crop review requires the actual image files.
+- `src/components/brand-photo.tsx`: Next.js responsive image component for the three exact supplied assets. Hero photography is contained on desktop and presented separately from text on mobile to preserve the subject. Original files are now integrated from `public/images/`; responsive crops are covered by desktop and mobile browser review.
 - `src/app/fonts/`: locally hosted Cormorant Garamond and Manrope Latin font files, sourced from Fontsource 5.3.0. Their OFL licenses are included. Builds and visitors do not contact a font provider.
 - `src/app/globals.css`: near-black `#0B0B0B`, charcoal `#151515` / `#242424`, warm white `#F5F3EF`, muted gray `#A3A3A3`, and restrained gold `#C3B180`. Reusable Tailwind `brand-*` colors and CSS variables remain available.
 - `src/app/privacy/page.tsx`: factual application-preview privacy information; the public privacy notice and contact must be confirmed before accepting applications.
 
-### Current image blocker
+### Original brand photographs
 
-The founder supplied three inline images in chat, but their original downloadable files are not available in the execution workspace. No replacement imagery has been generated or substituted. The page image slots are explicitly labeled pending originals and do not request nonexistent URLs.
+Commit `b688f8d` connects the exact founder-supplied assets:
 
-Expected asset paths for integration by the developer after receiving downloadable originals:
+- `public/images/VFN-Kettlebell-Hero (1).jpg`: homepage hero and Coaching page.
+- `public/images/Arise Professional -65.JPG`: homepage founder section and About page.
+- `public/images/E8CC240A-59C3-482F-BFE8-D116CE373189.PNG`: The 1% Method section.
 
-- `public/brand/sebastian-kettlebells.jpg`: the supplied kettlebell photograph.
-- `public/brand/sebastian-portrait.jpg`: the supplied smiling portrait.
-- `public/brand/panther.jpg`: the exact supplied architectural panther image.
-
-Adding the actual files and rebuilding enables optimized responsive delivery. Do not fabricate the files, rename a different image into these paths, alter the founder’s appearance, or treat these placeholders as completed image integration. Image load quality, crops, and subject preservation must be verified on desktop and mobile after the originals arrive.
+The original files remain unchanged. `next/image` provides responsive, optimized delivery; filenames with spaces and uppercase extensions are URL-encoded. The hero is contained on desktop to preserve the full photograph; mobile places the image above the text so the founder is not obscured. Browser tests verify decoded images, correct source mapping, successful optimizer responses, and absence of missing-asset placeholders at every placement.
 
 No testimonials, transformations, performance statistics, prices, or unapproved social/contact links are fabricated. Results have a clearly labeled editorial placeholder. Canonical URLs, a sitemap, and absolute Open Graph image URLs should use the real public domain once confirmed.
 

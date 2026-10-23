@@ -160,3 +160,50 @@ test("skip navigation and reduced motion are available", async ({ page }) => {
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#main$/);
 });
+
+test("original brand images decode through the image optimizer on every placement", async ({
+  page,
+}) => {
+  const assets = {
+    kettlebells: "VFN-Kettlebell-Hero (1).jpg",
+    portrait: "Arise Professional -65.JPG",
+    panther: "E8CC240A-59C3-482F-BFE8-D116CE373189.PNG",
+  };
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  for (const [route, kinds] of [
+    ["/", ["kettlebells", "panther", "portrait"]],
+    ["/coaching", ["kettlebells"]],
+    ["/about", ["portrait"]],
+  ] as const) {
+    await page.goto(route);
+    await expect(page.locator(".asset-placeholder")).toHaveCount(0);
+    for (const kind of kinds) {
+      const image = page.locator(`.photo-${kind} img`);
+      await image.scrollIntoViewIfNeeded();
+      await expect(image).toBeVisible();
+      await image.evaluate((element: HTMLImageElement) => element.decode());
+      const details = await image.evaluate((element: HTMLImageElement) => ({
+        width: element.naturalWidth,
+        height: element.naturalHeight,
+        source: element.currentSrc,
+        alt: element.alt,
+      }));
+      expect(details.width).toBeGreaterThan(0);
+      expect(details.height).toBeGreaterThan(0);
+      expect(details.alt).toBeTruthy();
+      const url = new URL(details.source);
+      expect(url.pathname).toBe("/_next/image");
+      expect(url.searchParams.get("url")).toBe(
+        `/images/${encodeURIComponent(assets[kind])}`,
+      );
+      const response = await page.request.get(details.source);
+      expect(response.ok()).toBe(true);
+      expect(response.headers()["content-type"]).toMatch(/^image\//);
+    }
+  }
+  expect(errors).toEqual([]);
+});
