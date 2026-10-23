@@ -74,6 +74,33 @@ export function ApplicationForm() {
           <span>02 /</span> Your starting point
         </legend>
         <label>
+          Primary fitness goal
+          <select name="primaryGoal" required defaultValue="">
+            <option value="" disabled>
+              Select your main focus
+            </option>
+            <option>Build strength</option>
+            <option>Improve athletic performance</option>
+            <option>Develop training consistency</option>
+            <option>General fitness</option>
+            <option>Other / to discuss</option>
+          </select>
+        </label>
+        <label>
+          Preferred coaching format
+          <select name="format" required defaultValue="">
+            <option value="" disabled>
+              Select a preference
+            </option>
+            <option>Online coaching</option>
+            <option>In person, if available</option>
+            <option>Open to discussing options</option>
+          </select>
+          <span className="field-hint">
+            A preference is not confirmation of availability.
+          </span>
+        </label>
+        <label>
           Training experience
           <select name="experience" required defaultValue="">
             <option value="" disabled>
@@ -102,11 +129,12 @@ export function ApplicationForm() {
         </label>
         <div className="field-grid">
           <label>
-            Training days per week
+            Current training frequency
             <select name="days" required defaultValue="">
               <option value="" disabled>
-                Select availability
+                Select current frequency
               </option>
+              <option>Not currently training</option>
               <option>1–2 days</option>
               <option>3–4 days</option>
               <option>5+ days</option>
@@ -140,7 +168,7 @@ export function ApplicationForm() {
         <input type="checkbox" required name="adult" />
         <span>
           I confirm I am 18 or older and understand this preview does not send
-          an application.
+          an application. See the privacy and application status below.
         </span>
       </label>
       <button
@@ -171,6 +199,11 @@ export function ApplicationForm() {
           </>
         )}
       </div>
+      <p className="small muted">
+        <a className="text-link" href="/privacy">
+          Privacy &amp; application status
+        </a>
+      </p>
       <noscript>
         <p className="form-notice">
           Form checking requires JavaScript. Submission is unavailable; no

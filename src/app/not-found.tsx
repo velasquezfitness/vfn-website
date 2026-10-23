@@ -3,15 +3,13 @@ import { Arrow } from "@/components/brand";
 export default function NotFound() {
   return (
     <main id="main" className="container page-intro">
-      <p className="eyebrow">404 / OFF THE PATH</p>
+      <p className="eyebrow">404 / PAGE NOT FOUND</p>
       <h1>
-        Reset.
+        A different
         <br />
-        <span className="yellow">Refocus.</span>
+        <em>starting point.</em>
       </h1>
-      <p className="intro-copy">
-        This page doesn’t exist. Let’s get you back to the starting point.
-      </p>
+      <p className="intro-copy">The page you’re looking for isn’t here.</p>
       <Link className="button" href="/">
         Back to home <Arrow />
       </Link>

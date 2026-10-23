@@ -1,24 +1,21 @@
 import Link from "next/link";
-import { Arrow, Mark } from "./brand";
+import { Arrow } from "./brand";
 export function ApplyCTA() {
   return (
-    <section className="cta-section">
-      <div className="container cta-inner">
-        <div>
-          <p className="eyebrow">THE NEXT REP IS YOURS</p>
-          <h2>
-            Make better
-            <br />
-            your standard.
-          </h2>
-        </div>
-        <div>
+    <section className="closing-section">
+      <div className="container closing-inner">
+        <p className="eyebrow">YOUR NEXT CHAPTER</p>
+        <h2>
+          Built around you.
+          <br />
+          <em>Designed for progress.</em>
+        </h2>
+        <div className="closing-bottom">
           <p>
-            You don’t need a perfect starting point.
-            <br />
-            You need a decision to move forward.
+            A thoughtful approach to training.
+            <br />A conversation about what comes next.
           </p>
-          <Link className="button button-dark" href="/apply">
+          <Link className="button" href="/apply">
             Apply for coaching <Arrow />
           </Link>
         </div>
@@ -31,31 +28,19 @@ export function Footer() {
     <footer className="site-footer container">
       <div className="footer-top">
         <Link href="/" className="wordmark" aria-label="VFN — Home">
-          <Mark />
-          <span>
-            VFN<span className="wordmark-caption">FITNESS & NUTRITION</span>
-          </span>
+          VFN<span>VELASQUEZ FITNESS & NUTRITION</span>
         </Link>
-        <p>
-          Quiet focus. Relentless intent.
-          <br />
-          <span className="muted">1% Better Everyday.</span>
-        </p>
+        <p className="footer-philosophy">1% Better Everyday.</p>
         <nav aria-label="Footer navigation">
-          <Link href="/coaching">
-            Coaching <Arrow />
-          </Link>
-          <Link href="/about">
-            About VFN <Arrow />
-          </Link>
-          <Link href="/apply">
-            Apply for coaching <Arrow />
-          </Link>
+          <Link href="/coaching">Coaching</Link>
+          <Link href="/about">About</Link>
+          <Link href="/apply">Apply</Link>
+          <Link href="/privacy">Privacy</Link>
         </nav>
       </div>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Velasquez Fitness & Nutrition</span>
-        <span>BUILT ON INTENTION. NOT HYPE.</span>
+        <span>INDIVIDUAL BY DESIGN.</span>
       </div>
     </footer>
   );
@@ -77,7 +62,7 @@ export function PageIntro({
       <h1>
         {title}
         <br />
-        <span className="yellow">{accent}</span>
+        <em>{accent}</em>
       </h1>
       <p className="intro-copy">{description}</p>
     </section>

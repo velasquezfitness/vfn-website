@@ -1,79 +1,77 @@
 import type { Metadata } from "next";
+import { BrandPhoto } from "@/components/brand-photo";
+import { ApplyCTA } from "@/components/shared";
 import { founder } from "@/content/site";
-import { ApplyCTA, PageIntro } from "@/components/shared";
-import { Mark } from "@/components/brand";
 export const metadata: Metadata = {
-  title: "About VFN",
+  title: "Meet Sebastian Velasquez",
   description:
-    "Discover the philosophy behind Velasquez Fitness & Nutrition: quiet focus, intentional training, and 1% Better Everyday.",
+    "Meet Sebastian Velasquez: personal trainer, Senior Fitness Specialist, endurance athlete, HYROX competitor, and founder of VFN.",
 };
 export default function About() {
   return (
     <main id="main">
-      <PageIntro
-        label="BEHIND THE STANDARD"
-        title="An instinct"
-        accent="for better."
-        description="VFN is a commitment to continuous improvement. A place for purposeful work, honest effort, and the discipline to keep evolving."
-      />
-      <section className="container about-story">
-        <div className="founder-art">
-          <Mark />
-          <span>IDENTITY STUDY / VFN</span>
-          <p>
-            Founder portrait to be added.
-            <br />
-            Temporary brand artwork.
-          </p>
-        </div>
+      <section className="container about-intro">
         <div>
-          <p className="eyebrow">THE PERSON BEHIND THE PURPOSE</p>
-          <h2>{founder.name}</h2>
-          <p className="muted">{founder.biography}</p>
-          <div className="editorial-note">
-            <span className="eyebrow">CREDENTIALS / TO BE CONFIRMED</span>
-            <p>{founder.credentials}</p>
-          </div>
-          <p className="small muted">
-            Founder details are intentionally left unverified. No qualifications
-            or personal history are implied by this placeholder.
+          <p className="eyebrow">THE PERSON BEHIND THE METHOD</p>
+          <h1>
+            Sebastian
+            <br />
+            <em>Velasquez.</em>
+          </h1>
+          <p className="intro-copy">
+            A coach. An athlete.
+            <br />A belief in individual progress.
+          </p>
+          <p className="about-intro-detail">
+            FOUNDER / VELASQUEZ FITNESS & NUTRITION
           </p>
         </div>
+        <BrandPhoto kind="portrait" priority />
       </section>
-      <section className="section container">
-        <p className="eyebrow">WHAT WE STAND FOR</p>
-        <h2>Earn the next level.</h2>
-        <div className="card-grid process">
-          {[
-            [
-              "Focus",
-              "Give the work your attention. Progress starts with knowing what matters and showing up for it.",
-            ],
-            [
-              "Discipline",
-              "Build repeatable habits. The ordinary days are where the foundation is made.",
-            ],
-            [
-              "Evolution",
-              "Stay open to learning. Adjust with intention and keep raising your own standard.",
-            ],
-          ].map(([t, c], i) => (
-            <article key={t}>
-              <span className="card-number">0{i + 1} /</span>
-              <h3>{t}</h3>
-              <p className="muted">{c}</p>
-            </article>
-          ))}
+      <section className="section container editorial-story">
+        <p className="eyebrow">A HUMAN APPROACH</p>
+        <div>
+          <h2>
+            Performance matters.
+            <br />
+            <em>So does the person.</em>
+          </h2>
+          <p>{founder.biography}</p>
+          <p>
+            VFN’s philosophy puts that individual perspective at the center of
+            the coaching process. Understanding the person comes before writing
+            the program.
+          </p>
+          <ul
+            className="credential-list"
+            aria-label="Professional and athletic background"
+          >
+            {founder.credentials.map((c) => (
+              <li key={c}>{c}</li>
+            ))}
+          </ul>
         </div>
       </section>
-      <section className="manifesto container">
-        <p className="eyebrow">THE VFN MINDSET</p>
-        <blockquote>
-          “The goal isn’t perfect.
-          <br />
-          The goal is <span className="yellow">better.</span>”
-        </blockquote>
-        <p className="muted">1% Better Everyday.</p>
+      <section className="about-philosophy">
+        <div className="container">
+          <p className="eyebrow">1% BETTER EVERYDAY</p>
+          <h2>
+            Not a demand for perfection.
+            <br />
+            <em>A practice of paying attention.</em>
+          </h2>
+          <div className="belief-copy">
+            <p>
+              As a framework for training, the 1% Method brings together
+              understanding, structure, consistent execution, and thoughtful
+              feedback.
+            </p>
+            <p>
+              The aim is lasting ownership: learning what works for you,
+              adapting as you develop, and making progress that belongs to you.
+            </p>
+          </div>
+        </div>
       </section>
       <ApplyCTA />
     </main>

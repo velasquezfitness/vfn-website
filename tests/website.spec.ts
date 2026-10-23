@@ -5,11 +5,14 @@ test("all pages render with metadata, working links, and no horizontal overflow"
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  for (const path of ["/", "/coaching", "/about", "/apply"]) {
+  for (const path of ["/", "/coaching", "/about", "/apply", "/privacy"]) {
     const response = await page.goto(path);
     expect(response?.status()).toBe(200);
     await expect(page.locator("h1")).toBeVisible();
-    await expect(page.locator("body")).toHaveCSS("background-color", "rgb(8, 8, 8)");
+    await expect(page.locator("body")).toHaveCSS(
+      "background-color",
+      "rgb(11, 11, 11)",
+    );
     await expect(page).toHaveTitle(/VFN/);
     expect(
       await page.locator('meta[name="description"]').getAttribute("content"),
@@ -20,7 +23,7 @@ test("all pages render with metadata, working links, and no horizontal overflow"
       ),
     ).toBe(true);
     for (const link of await page.locator('a[href^="/"]').all()) {
-      expect(["/", "/coaching", "/about", "/apply"]).toContain(
+      expect(["/", "/coaching", "/about", "/apply", "/privacy"]).toContain(
         await link.getAttribute("href"),
       );
     }
@@ -72,10 +75,14 @@ test("application validates fields without sending or claiming submission", asyn
   await page.getByLabel("Email address").fill("invalid-email");
   await page.getByLabel("Where are you based?").fill("San Juan / AST");
   await page.getByLabel("Training experience").selectOption({ index: 1 });
+  await page.getByLabel("Primary fitness goal").selectOption({ index: 1 });
+  await page.getByLabel("Preferred coaching format").selectOption({ index: 1 });
   await page
     .getByLabel("What do you want to work toward?")
     .fill("Build a consistent strength training routine.");
-  await page.getByLabel("Training days per week").selectOption({ index: 2 });
+  await page
+    .getByLabel("Current training frequency")
+    .selectOption({ index: 2 });
   await page.getByLabel("Equipment access").selectOption({ index: 1 });
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Check application" }).click();
@@ -108,4 +115,48 @@ test("coaching FAQs expand with keyboard and unknown routes return 404", async (
   const response = await page.goto("/not-a-real-page");
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("link", { name: "Back to home" })).toBeVisible();
+});
+
+test("method anchor, founder background, and honest results placeholder", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Explore the method" }).click();
+  await expect(page).toHaveURL(/#method$/);
+  for (const stage of ["Understand", "Build", "Execute", "Evolve", "Master"]) {
+    await expect(
+      page.getByRole("heading", { name: stage, exact: true }),
+    ).toBeVisible();
+  }
+  await expect(
+    page.getByText(
+      "Approved client results and stories have not yet been supplied.",
+    ),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Meet your coach" }).click();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Sebastian",
+  );
+  await expect(
+    page
+      .getByRole("list", { name: "Professional and athletic background" })
+      .getByRole("listitem"),
+  ).toHaveCount(4);
+});
+
+test("skip navigation and reduced motion are available", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  expect(
+    await page.evaluate(
+      () => getComputedStyle(document.documentElement).scrollBehavior,
+    ),
+  ).toBe("auto");
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("link", { name: "Skip to content" }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main$/);
 });

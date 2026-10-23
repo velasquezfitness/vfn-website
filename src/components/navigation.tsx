@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
-import { Arrow, Mark } from "./brand";
+import { Arrow } from "./brand";
 const links = [
   ["/", "Home"],
   ["/coaching", "Coaching"],
@@ -22,10 +22,7 @@ export function Navigation() {
           aria-label="VFN — Home"
           onClick={() => setOpen(false)}
         >
-          <Mark />
-          <span>
-            VFN<span className="wordmark-caption">FITNESS & NUTRITION</span>
-          </span>
+          VFN<span>VELASQUEZ FITNESS & NUTRITION</span>
         </Link>
         <button
           ref={button}
@@ -39,7 +36,7 @@ export function Navigation() {
         <nav
           id="primary-navigation"
           aria-label="Main navigation"
-          className={open ? "nav-links is-open" : "nav-links"}
+          className={`nav-links ${open ? "is-open" : ""}`}
           onKeyDown={(e) => {
             if (e.key === "Escape") {
               setOpen(false);
@@ -59,7 +56,7 @@ export function Navigation() {
             </Link>
           ))}
         </nav>
-        <Link className="button header-cta" href="/apply">
+        <Link href="/apply" className="header-cta">
           Apply for coaching <Arrow />
         </Link>
       </div>

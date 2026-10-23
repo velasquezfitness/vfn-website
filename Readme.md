@@ -1,6 +1,6 @@
 # Velasquez Fitness & Nutrition
 
-A mobile-first Next.js App Router website with TypeScript, Tailwind CSS 4, and a restrained black / white / yellow identity. No database, payment integration, external fonts, analytics, or stock photography.
+A mobile-first Next.js App Router website with TypeScript, Tailwind CSS 4, and a photography-led near-black / warm-white / muted-gold editorial identity. No database, payment integration, external fonts, analytics, or stock photography.
 
 ## View locally
 
@@ -8,12 +8,12 @@ Use Node.js 20.9+ (validated with Node.js 24) and npm:
 
 ```sh
 cd /workspace/vfn-website
-git switch feat/vfn-complete-website
+git switch feat/vfn-editorial-redesign
 npm ci
 npm run dev -- --hostname 0.0.0.0
 ```
 
-Open port **3000** in your development environment's port viewer. On a local machine, open `http://localhost:3000`. Routes: `/`, `/coaching`, `/about`, `/apply`.
+On a local machine, open `http://localhost:3000`. In GitHub Codespaces, use its **Open in Browser** prompt for port 3000. This Codex onboarding interface does not expose an interactive browser preview. Routes: `/`, `/coaching`, `/about`, `/apply`, `/privacy`.
 
 If npm's default cache is not writable in the cloud environment, prefix installation with `npm_config_cache=/workspace/.npm-cache`.
 
@@ -37,12 +37,27 @@ For a local production preview, run `npm start -- --hostname 0.0.0.0` after buil
 
 ## Content and brand assets
 
-- `src/content/site.ts`: editable founder name, biography, and credentials. These are clearly labeled placeholders; replace with verified, founder-approved information.
-- `src/components/brand.tsx`: original temporary geometric panther and VFN wordmark. Replace with approved vector brand assets when available. The About portrait space is explicitly labeled as temporary artwork, not a real photograph.
-- `src/app/globals.css`: reusable `brand-black`, `brand-white`, and `brand-yellow` Tailwind colors and matching `--color-brand-*` CSS variables, shared layouts, mobile breakpoints, focus treatment, and reduced-motion support.
-- `src/app/`: page copy, page-specific SEO titles/descriptions, icon, and 404 page. Canonical URLs and a sitemap should be added once the actual public domain is confirmed; no domain has been invented.
+The approved direction follows the founder’s supplied Framer hero reference: cinematic imagery, editorial serif headlines, restrained sans-serif navigation, and quiet text-link CTAs. Bright-yellow panels, repetitive cards, and the temporary vector-panther hero have been removed.
 
-No testimonials, certifications, transformation results, prices, or personal photos are fabricated. The credibility section explains principles rather than claiming unverified outcomes.
+- `src/content/site.ts`: founder background supplied in the master brief and the five method stages. No additional qualifications, years of experience, or results have been invented.
+- `src/components/brand-photo.tsx`: Next.js responsive image component for the three exact supplied assets. Hero photography is contained on desktop and presented separately from text on mobile to preserve the subject. Final crop review requires the actual image files.
+- `src/app/fonts/`: locally hosted Cormorant Garamond and Manrope Latin font files, sourced from Fontsource 5.3.0. Their OFL licenses are included. Builds and visitors do not contact a font provider.
+- `src/app/globals.css`: near-black `#0B0B0B`, charcoal `#151515` / `#242424`, warm white `#F5F3EF`, muted gray `#A3A3A3`, and restrained gold `#C3B180`. Reusable Tailwind `brand-*` colors and CSS variables remain available.
+- `src/app/privacy/page.tsx`: factual application-preview privacy information; the public privacy notice and contact must be confirmed before accepting applications.
+
+### Current image blocker
+
+The founder supplied three inline images in chat, but their original downloadable files are not available in the execution workspace. No replacement imagery has been generated or substituted. The page image slots are explicitly labeled pending originals and do not request nonexistent URLs.
+
+Expected asset paths for integration by the developer after receiving downloadable originals:
+
+- `public/brand/sebastian-kettlebells.jpg`: the supplied kettlebell photograph.
+- `public/brand/sebastian-portrait.jpg`: the supplied smiling portrait.
+- `public/brand/panther.jpg`: the exact supplied architectural panther image.
+
+Adding the actual files and rebuilding enables optimized responsive delivery. Do not fabricate the files, rename a different image into these paths, alter the founder’s appearance, or treat these placeholders as completed image integration. Image load quality, crops, and subject preservation must be verified on desktop and mobile after the originals arrive.
+
+No testimonials, transformations, performance statistics, prices, or unapproved social/contact links are fabricated. Results have a clearly labeled editorial placeholder. Canonical URLs, a sitemap, and absolute Open Graph image URLs should use the real public domain once confirmed.
 
 ## Application status and secure activation plan
 

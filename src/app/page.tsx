@@ -1,163 +1,191 @@
 import Link from "next/link";
-import { Arrow, Mark } from "@/components/brand";
+import { Arrow } from "@/components/brand";
+import { BrandPhoto } from "@/components/brand-photo";
 import { ApplyCTA } from "@/components/shared";
+import { founder, method } from "@/content/site";
 export default function Home() {
   return (
     <main id="main">
-      <section className="hero container">
-        <div className="hero-copy">
-          <p className="eyebrow">
-            <span className="status-dot" /> VELASQUEZ FITNESS & NUTRITION
-          </p>
-          <h1>
-            Not for
-            <br />
-            the ordinary.
-            <br />
-            <span className="yellow">For the better.</span>
-          </h1>
-          <p className="hero-description">
-            Train with intention. Move with purpose.
-            <br />
-            Build the discipline to become more.
-          </p>
-          <div className="hero-actions">
-            <Link className="button" href="/apply">
-              Apply for coaching <Arrow />
-            </Link>
-            <Link className="text-link" href="/coaching">
-              Explore the approach <Arrow />
-            </Link>
+      <section className="editorial-hero">
+        <BrandPhoto
+          kind="kettlebells"
+          priority
+          className="hero-photo"
+          sizes="(max-width: 700px) 100vw, 50vw"
+        />
+        <div className="container hero-inner">
+          <div className="hero-copy">
+            <p className="eyebrow">THE 1% METHOD™</p>
+            <h1>
+              Self-Mastery is
+              <br />
+              the destination.
+            </h1>
+            <p className="hero-subtitle">
+              1% Better Every Day
+              <br />
+              is the process.
+            </p>
+            <div className="hero-actions">
+              <Link href="/apply" className="button">
+                Apply for coaching <Arrow />
+              </Link>
+              <a href="#method" className="text-link">
+                Explore the method <span aria-hidden="true">↓</span>
+              </a>
+            </div>
           </div>
-        </div>
-        <div
-          className="hero-art"
-          aria-label="Abstract panther-inspired geometric brand study"
-        >
-          <div className="art-cross cross-one">+</div>
-          <div className="art-cross cross-two">+</div>
-          <div className="art-ring" />
-          <Mark className="hero-panther" />
-          <span className="art-coordinate">VFN / FORM STUDY 001</span>
-          <span className="art-side">FOCUS · INTENT · DISCIPLINE</span>
-          <div className="art-label">
-            <span>THE INSTINCT TO EVOLVE.</span>
-            <strong>01 / ∞</strong>
+          <div className="hero-footnote">
+            <span>SEBASTIAN VELASQUEZ / PERSONAL COACHING</span>
+            <span>STRENGTH. PERFORMANCE. SELF-MASTERY.</span>
           </div>
-        </div>
-        <div className="hero-bottom">
-          <span>PERSONAL COACHING. HIGHER STANDARDS.</span>
-          <a href="#philosophy">
-            THE VFN MINDSET <span aria-hidden="true">↓</span>
-          </a>
         </div>
       </section>
-      <div className="statement-strip" aria-hidden="true">
-        <span>INTENTION OVER EXCUSES</span>
-        <span>+</span>
-        <span>CONSISTENCY OVER HYPE</span>
-        <span>+</span>
-        <span>1% BETTER EVERYDAY</span>
-      </div>
-      <section id="philosophy" className="section container philosophy">
+      <section className="section container belief">
+        <p className="eyebrow section-label">01 / THE BELIEF</p>
         <div>
-          <p className="eyebrow">01 / THE PHILOSOPHY</p>
           <h2>
-            Small progress.
+            Progress is built through
             <br />
-            <span className="muted">Uncompromising</span>
+            <em>what you choose to repeat.</em>
+          </h2>
+          <div className="belief-copy">
+            <p>
+              Meaningful change starts with understanding the individual. Your
+              experience, your circumstances, and the goals that matter to you.
+            </p>
+            <p>
+              VFN brings structure to that starting point: deliberate training,
+              personal accountability, and the space to keep improving.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="method" className="method-section">
+        <div className="method-visual">
+          <BrandPhoto kind="panther" />
+          <div className="method-image-caption">
+            <span>
+              QUIET CONFIDENCE.
+              <br />
+              DELIBERATE ACTION.
+            </span>
+            <span>THE VFN PHILOSOPHY</span>
+          </div>
+        </div>
+        <div className="method-content">
+          <p className="eyebrow">02 / THE 1% METHOD</p>
+          <h2>
+            A process.
             <br />
-            standards.
+            <em>Not a shortcut.</em>
+          </h2>
+          <p className="section-description">
+            Five stages. One individual. A framework for turning effort into
+            intentional, lasting development.
+          </p>
+          <ol className="method-list">
+            {method.map((stage, i) => (
+              <li key={stage.name}>
+                <span className="index">0{i + 1}</span>
+                <div>
+                  <h3>{stage.name}</h3>
+                  <p>{stage.copy}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+      <section className="section container results">
+        <div className="section-heading">
+          <p className="eyebrow">03 / THE WORK, IN PRACTICE</p>
+          <h2>
+            Progress has
+            <br />
+            <em>a personal definition.</em>
           </h2>
         </div>
-        <div className="philosophy-copy">
-          <div className="one-percent">
-            1<span>%</span>
-            <span className="one-caption">BETTER EVERYDAY</span>
-          </div>
+        <div className="results-placeholder">
+          <span className="eyebrow">CLIENT JOURNAL / FORTHCOMING</span>
           <p>
-            Progress isn’t a single breakthrough. It’s the decision to show up,
-            put in the work, and do the next thing better.
+            A space for real stories.
+            <br />
+            <em>Shared with permission.</em>
           </p>
-          <p className="muted">
-            VFN is built around that decision. A purposeful approach to training
-            that respects where you are and challenges where you can go.
-          </p>
-          <Link href="/about" className="text-link">
-            The mindset behind VFN <Arrow />
-          </Link>
+          <div>
+            <span>
+              Approved client results and stories have not yet been supplied.
+            </span>
+            <span>
+              No testimonials or performance claims are represented here.
+            </span>
+          </div>
         </div>
       </section>
-      <section className="section benefits">
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">02 / BUILT AROUND YOU</p>
-              <h2>
-                Your ambition.
-                <br />A clearer direction.
-              </h2>
-            </div>
+      <section className="practice-section">
+        <div className="container practice-inner">
+          <div>
+            <p className="eyebrow">04 / THE PRACTICE</p>
+            <h2>
+              Personal coaching.
+              <br />
+              <em>In every sense.</em>
+            </h2>
             <Link href="/coaching" className="text-link">
               Explore coaching <Arrow />
             </Link>
           </div>
-          <div className="card-grid">
-            {[
-              [
-                "01",
-                "Train with purpose",
-                "Personalized programming shaped around your goals, experience, and the demands of your everyday life.",
-              ],
-              [
-                "02",
-                "Build your capacity",
-                "Develop strength, movement quality, and performance with a deliberate approach to progression.",
-              ],
-              [
-                "03",
-                "Stay accountable",
-                "Turn intention into action with ongoing communication, useful feedback, and a plan that can evolve.",
-              ],
-            ].map(([n, title, copy]) => (
-              <article className="benefit-card" key={n}>
-                <span className="card-number">{n} /</span>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-                <span className="card-line" />
-              </article>
-            ))}
+          <div className="practice-list">
+            <article>
+              <span className="index">I.</span>
+              <div>
+                <h3>A plan with purpose.</h3>
+                <p>
+                  Personalized programming that connects your training to your
+                  goals, available time, and experience.
+                </p>
+              </div>
+            </article>
+            <article>
+              <span className="index">II.</span>
+              <div>
+                <h3>A clear perspective.</h3>
+                <p>
+                  Structured accountability, progress tracking, and ongoing
+                  communication with your coach.
+                </p>
+              </div>
+            </article>
+            <article>
+              <span className="index">III.</span>
+              <div>
+                <h3>Room to evolve.</h3>
+                <p>
+                  Thoughtful program adjustments as your strength, performance,
+                  and circumstances develop.
+                </p>
+              </div>
+            </article>
           </div>
         </div>
       </section>
-      <section className="section container standard">
-        <div className="standard-art" aria-hidden="true">
-          <span>VFN</span>
-          <div>
-            NO SHORTCUTS.
-            <br />
-            JUST STANDARDS.
-          </div>
-        </div>
-        <div>
-          <p className="eyebrow">03 / THE VFN STANDARD</p>
+      <section className="section container founder-section">
+        <BrandPhoto kind="portrait" />
+        <div className="founder-copy">
+          <p className="eyebrow">05 / MEET THE FOUNDER</p>
           <h2>
-            Substance
+            Serious about training.
             <br />
-            before noise.
+            <em>Personal about coaching.</em>
           </h2>
-          <p className="muted">
-            Your trust should be earned through clarity, not big promises. Start
-            with the approach, understand the process, and decide whether it
-            fits you.
+          <p className="founder-name">
+            {founder.name}
+            <span>FOUNDER & COACH</span>
           </p>
-          <ul className="check-list">
-            <li>Individual goals before generic plans</li>
-            <li>Consistent effort before quick fixes</li>
-            <li>Honest conversations before guarantees</li>
-          </ul>
+          <p>{founder.biography}</p>
           <Link href="/about" className="text-link">
-            Meet the philosophy <Arrow />
+            Meet your coach <Arrow />
           </Link>
         </div>
       </section>
