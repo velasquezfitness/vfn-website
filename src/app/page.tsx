@@ -8,7 +8,7 @@ export default function Home() {
     <main id="main">
       <section className="editorial-hero">
         <BrandPhoto
-          kind="kettlebells"
+          kind="portrait"
           priority
           className="hero-photo"
           sizes="(max-width: 700px) 100vw, 50vw"
@@ -17,9 +17,9 @@ export default function Home() {
           <div className="hero-copy">
             <p className="eyebrow">THE 1% METHOD™</p>
             <h1>
-              Self-Mastery is
+              Self-Mastery Is
               <br />
-              the destination.
+              the Destination.
             </h1>
             <p className="hero-subtitle">
               1% Better Every Day
@@ -76,9 +76,9 @@ export default function Home() {
         <div className="method-content">
           <p className="eyebrow">02 / THE 1% METHOD</p>
           <h2>
-            A process.
+            A Process.
             <br />
-            <em>Not a shortcut.</em>
+            <em>Not a Shortcut.</em>
           </h2>
           <p className="section-description">
             Five stages. One individual. A framework for turning effort into
@@ -171,7 +171,7 @@ export default function Home() {
         </div>
       </section>
       <section className="section container founder-section">
-        <BrandPhoto kind="portrait" />
+        <BrandPhoto kind="kettlebells" />
         <div className="founder-copy">
           <p className="eyebrow">05 / MEET THE FOUNDER</p>
           <h2>

@@ -24,12 +24,12 @@ export default function Apply() {
             <em>the individual.</em>
           </h2>
           <p>
-            This is a starting point for a coaching conversation, not a
-            commitment to a package or a payment.
+            For VFN Coaching or VFN Performance, this is a starting point for a
+            coaching conversation, not a commitment to a package or a payment.
           </p>
           <p>
             Once applications open, the next step is to discuss your goals,
-            coaching fit, and availability.
+            coaching fit, support expectations, and availability.
           </p>
           <p className="small">
             Please share only what’s relevant to your training. Medical records

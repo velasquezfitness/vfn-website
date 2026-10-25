@@ -17,6 +17,125 @@ export default function Coaching() {
         accent="Designed for progress."
         description="Personalized training, structured accountability, and ongoing coaching designed to help you build strength, improve performance, and make lasting progress."
       />
+      <section
+        id="offerings"
+        className="container offerings-section"
+        aria-labelledby="offerings-title"
+      >
+        <div className="offerings-heading">
+          <div>
+            <p className="eyebrow">FIND YOUR APPROACH</p>
+            <h2 id="offerings-title">
+              The right level
+              <br />
+              <em>of support.</em>
+            </h2>
+          </div>
+          <p>
+            Independent programming or an ongoing coaching relationship. Choose
+            the structure that fits the way you want to train.
+          </p>
+        </div>
+        <div className="package-grid">
+          <article className="package-card" aria-labelledby="method-title">
+            <p className="eyebrow">INDEPENDENT TRAINING</p>
+            <h3 id="method-title">VFN Method</h3>
+            <p className="package-model">Eight weeks · one-time purchase</p>
+            <p className="package-audience">
+              For self-directed training with a clear, goal-specific plan.
+            </p>
+            <ul>
+              <li>Prebuilt, goal-specific training program</li>
+              <li>Limited customization</li>
+              <li>PDF delivery</li>
+              <li>No ongoing coaching or check-ins</li>
+            </ul>
+            <p className="package-difference">
+              The plan, without an ongoing coaching relationship.
+            </p>
+            <Link className="button" href="#method-program">
+              View program details <Arrow />
+            </Link>
+          </article>
+          <article className="package-card" aria-labelledby="coaching-title">
+            <p className="eyebrow">ONGOING ONLINE COACHING</p>
+            <h3 id="coaching-title">VFN Coaching</h3>
+            <p className="package-model">Individualized · ongoing</p>
+            <p className="package-audience">
+              For people who value an individual plan and structured
+              accountability.
+            </p>
+            <ul>
+              <li>Individualized programming</li>
+              <li>Progress tracking</li>
+              <li>Biweekly check-ins (every two weeks)</li>
+              <li>Defined communication and support</li>
+            </ul>
+            <p className="package-difference">
+              Personal direction, with a regular coaching rhythm.
+            </p>
+            <Link className="button" href="/apply">
+              Apply for Coaching <Arrow />
+            </Link>
+          </article>
+          <article className="package-card" aria-labelledby="performance-title">
+            <p className="eyebrow">PREMIUM INDIVIDUAL COACHING</p>
+            <h3 id="performance-title">VFN Performance</h3>
+            <p className="package-model">Individualized · higher-touch</p>
+            <p className="package-audience">
+              For people seeking closer feedback and a performance-oriented
+              approach.
+            </p>
+            <ul>
+              <li>
+                Individualized, performance-oriented programming when
+                appropriate
+              </li>
+              <li>Weekly check-ins and more frequent adjustments</li>
+              <li>Technique video reviews</li>
+              <li>Priority support</li>
+            </ul>
+            <p className="package-difference">
+              More frequent feedback and a closer view of your training.
+            </p>
+            <Link className="button" href="/apply">
+              Apply for Performance <Arrow />
+            </Link>
+          </article>
+        </div>
+        <p className="offerings-note">
+          Prices are not yet confirmed. No purchase or subscription is available
+          on this website. Ongoing coaching applications remain a preview until
+          secure delivery is enabled.
+        </p>
+      </section>
+      <section
+        id="method-program"
+        className="container method-program"
+        aria-labelledby="program-title"
+      >
+        <p className="eyebrow">VFN METHOD / PROGRAM DETAILS</p>
+        <div>
+          <h2 id="program-title">
+            A plan to follow.
+            <br />
+            <em>Independently.</em>
+          </h2>
+          <p>
+            An eight-week, prebuilt training program focused on a specific goal,
+            with limited customization and PDF delivery. It is a one-time
+            purchase offering, not a coaching subscription.
+          </p>
+          <p>
+            Ongoing coaching, check-ins, technique reviews, and continued
+            support are not included. Pricing and purchase availability will be
+            confirmed before this program can be purchased.
+          </p>
+          <Link href="#offerings" className="text-link">
+            Compare the approaches <Arrow />
+          </Link>
+        </div>
+      </section>
       <section className="container coaching-intro">
         <div className="coaching-intro-copy">
           <p className="eyebrow">FOR THE INDIVIDUAL</p>
@@ -41,7 +160,7 @@ export default function Coaching() {
         <BrandPhoto kind="kettlebells" />
       </section>
       <section className="section container editorial-story">
-        <p className="eyebrow">THE COACHING EXPERIENCE</p>
+        <p className="eyebrow">THE ONGOING COACHING EXPERIENCE</p>
         <div>
           <h2>
             A structure to work within.
@@ -77,7 +196,7 @@ export default function Coaching() {
       </section>
       <section className="coaching-process">
         <div className="container">
-          <p className="eyebrow">BEFORE THE FIRST SESSION</p>
+          <p className="eyebrow">BEFORE ONGOING COACHING BEGINS</p>
           <h2>A considered beginning.</h2>
           <ol className="process-list">
             {[
@@ -113,7 +232,7 @@ export default function Coaching() {
           ],
           [
             "How does communication work?",
-            "Ongoing communication and accountability are part of the approach. The specific channel, frequency, and scope should be agreed directly before coaching begins.",
+            "VFN Coaching includes check-ins every two weeks. VFN Performance includes weekly check-ins and priority support. Communication channels, support boundaries, and expectations are agreed before starting. VFN Method does not include ongoing support.",
           ],
           [
             "Is coaching online or in person?",

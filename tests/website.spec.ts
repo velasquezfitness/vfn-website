@@ -207,3 +207,67 @@ test("original brand images decode through the image optimizer on every placemen
   }
   expect(errors).toEqual([]);
 });
+
+test("approved homepage photo placements use a presentation-only monochrome treatment", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(
+    page.locator(".editorial-hero .photo-portrait img"),
+  ).toBeVisible();
+  await expect(page.locator(".editorial-hero .photo-kettlebells")).toHaveCount(
+    0,
+  );
+  const founder = page.locator(".founder-section .photo-kettlebells img");
+  await founder.scrollIntoViewIfNeeded();
+  await expect(founder).toBeVisible();
+  await expect(page.locator(".founder-section .photo-portrait")).toHaveCount(0);
+  for (const selector of [
+    ".editorial-hero .photograph",
+    ".founder-section .photograph",
+  ]) {
+    expect(
+      await page
+        .locator(selector)
+        .evaluate((element) => getComputedStyle(element).filter),
+    ).toContain("grayscale(1)");
+  }
+});
+
+test("coaching packages distinguish independent PDF training from ongoing support", async ({
+  page,
+}) => {
+  await page.goto("/coaching");
+  const method = page.getByRole("article", { name: "VFN Method", exact: true });
+  const coaching = page.getByRole("article", {
+    name: "VFN Coaching",
+    exact: true,
+  });
+  const performance = page.getByRole("article", {
+    name: "VFN Performance",
+    exact: true,
+  });
+  await expect(method).toContainText("Eight weeks · one-time purchase");
+  await expect(method).toContainText("PDF delivery");
+  await expect(method).toContainText("No ongoing coaching or check-ins");
+  await expect(coaching).toContainText("Biweekly check-ins (every two weeks)");
+  await expect(performance).toContainText("Weekly check-ins");
+  await expect(performance).toContainText("Technique video reviews");
+  await expect(performance).toContainText("Priority support");
+  await expect(page.locator("main")).not.toContainText(/\$(79|119|229)/);
+  await method.getByRole("link", { name: "View program details" }).click();
+  await expect(page).toHaveURL(/#method-program$/);
+  await expect(page.locator("#method-program")).toContainText(
+    "before this program can be purchased",
+  );
+  await coaching.getByRole("link", { name: "Apply for Coaching" }).click();
+  await expect(page).toHaveURL(/\/apply$/);
+  await expect(
+    page.getByRole("button", { name: "Submit application — unavailable" }),
+  ).toBeDisabled();
+  await page.goto("/coaching");
+  await performance
+    .getByRole("link", { name: "Apply for Performance" })
+    .click();
+  await expect(page).toHaveURL(/\/apply$/);
+});
