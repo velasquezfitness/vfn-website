@@ -15,8 +15,8 @@ const photographs = {
     label: "Sebastian’s smiling portrait",
   },
   panther: {
-    file: "E8CC240A-59C3-482F-BFE8-D116CE373189.PNG",
-    alt: "Black panther with golden eyes in a dark architectural interior",
+    file: "IMG_0825.JPG",
+    alt: "Black panther with golden eyes against a black background",
     label: "The founder’s golden-eyed panther image",
   },
 };

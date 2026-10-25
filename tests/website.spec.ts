@@ -167,7 +167,7 @@ test("original brand images decode through the image optimizer on every placemen
   const assets = {
     kettlebells: "VFN-Kettlebell-Hero (1).jpg",
     portrait: "Arise Professional -65.JPG",
-    panther: "E8CC240A-59C3-482F-BFE8-D116CE373189.PNG",
+    panther: "IMG_0825.JPG",
   };
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -270,4 +270,41 @@ test("coaching packages distinguish independent PDF training from ongoing suppor
     .getByRole("link", { name: "Apply for Performance" })
     .click();
   await expect(page).toHaveURL(/\/apply$/);
+});
+
+test("approved silver emblem replaces header text without changing home navigation", async ({
+  page,
+}) => {
+  await page.goto("/coaching");
+  const home = page
+    .getByRole("banner")
+    .getByRole("link", { name: "VFN — Home" });
+  const emblem = home.getByRole("img", {
+    name: "VFN silver V-and-panther emblem",
+  });
+  await expect(emblem).toBeVisible();
+  await emblem.evaluate((image: HTMLImageElement) => image.decode());
+  expect(await home.textContent()).toBe("");
+  const details = await emblem.evaluate((image: HTMLImageElement) => ({
+    source: image.currentSrc,
+    width: image.getBoundingClientRect().width,
+    height: image.getBoundingClientRect().height,
+    fit: getComputedStyle(image).objectFit,
+  }));
+  expect(details.width).toBe(details.height);
+  expect(details.width).toBeGreaterThanOrEqual(44);
+  expect(details.fit).toBe("contain");
+  expect(new URL(details.source).searchParams.get("url")).toBe(
+    "/images/Metallic%20Panther%20V%20Emblem.png",
+  );
+  const response = await page.request.get(details.source);
+  expect(response.ok()).toBe(true);
+  expect(response.headers()["content-type"]).toMatch(/^image\//);
+  await home.click();
+  await expect(page).toHaveURL("/");
+  const panther = page.locator("#method .photo-panther img");
+  await panther.scrollIntoViewIfNeeded();
+  await panther.evaluate((image: HTMLImageElement) => image.decode());
+  await expect(panther).toHaveCSS("object-fit", "contain");
+  await expect(panther).toHaveCSS("filter", "none");
 });

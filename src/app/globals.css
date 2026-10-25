@@ -356,7 +356,8 @@ em {
   inset: 0;
 }
 .method-visual .photograph {
-  object-position: center 55%;
+  object-fit: contain;
+  object-position: center;
 }
 .method-image-caption {
   position: absolute;
@@ -1062,7 +1063,7 @@ textarea::placeholder {
   }
   .method-visual {
     min-height: 0;
-    aspect-ratio: 852/1846;
+    aspect-ratio: 940/1671;
     max-height: 850px;
   }
   .method-image-caption {
@@ -1427,5 +1428,32 @@ textarea::placeholder {
     grid-template-columns: 1fr;
     gap: 5px;
     padding-bottom: 60px;
+  }
+}
+
+/* Original approved emblem: preserve proportions and blend its black canvas. */
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+.header-emblem {
+  display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+}
+.photo-panther {
+  background: #000;
+}
+@media (max-width: 700px) {
+  .header-brand,
+  .header-emblem {
+    width: 64px;
+    height: 64px;
   }
 }
