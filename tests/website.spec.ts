@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import sharp from "sharp";
 
 test("all pages render with metadata, working links, and no horizontal overflow", async ({
   page,
@@ -295,7 +296,7 @@ test("approved silver emblem replaces header text without changing home navigati
   expect(details.width).toBeGreaterThanOrEqual(44);
   expect(details.fit).toBe("contain");
   expect(new URL(details.source).searchParams.get("url")).toBe(
-    "/images/Metallic%20Panther%20V%20Emblem.png",
+    "/images/vfn-emblem-transparent.png",
   );
   const response = await page.request.get(details.source);
   expect(response.ok()).toBe(true);
@@ -307,4 +308,89 @@ test("approved silver emblem replaces header text without changing home navigati
   await panther.evaluate((image: HTMLImageElement) => image.decode());
   await expect(panther).toHaveCSS("object-fit", "contain");
   await expect(panther).toHaveCSS("filter", "none");
+});
+
+test("header and footer use the same transparent original emblem without CSS masking", async ({
+  page,
+}) => {
+  const [original, cutout] = await Promise.all([
+    sharp("public/images/Metallic Panther V Emblem.png")
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true }),
+    sharp("public/images/vfn-emblem-transparent.png")
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true }),
+  ]);
+  expect(cutout.info.width).toBe(original.info.width);
+  expect(cutout.info.height).toBe(original.info.height);
+  let transparent = 0;
+  let changedColorPixels = 0;
+  for (let i = 0; i < cutout.data.length; i += 4) {
+    if (cutout.data[i + 3] === 0) transparent++;
+    if (
+      cutout.data[i] !== original.data[i] ||
+      cutout.data[i + 1] !== original.data[i + 1] ||
+      cutout.data[i + 2] !== original.data[i + 2]
+    )
+      changedColorPixels++;
+  }
+  expect(transparent).toBeGreaterThan(
+    (original.info.width * original.info.height) / 2,
+  );
+  expect(changedColorPixels).toBe(0);
+  for (const [x, y] of [
+    [0, 0],
+    [1253, 0],
+    [0, 1253],
+    [1253, 1253],
+  ])
+    expect(cutout.data[(y * cutout.info.width + x) * 4 + 3]).toBe(0);
+  for (const [x, y] of [
+    [300, 250],
+    [900, 250],
+    [600, 950],
+    [620, 430],
+  ])
+    expect(cutout.data[(y * cutout.info.width + x) * 4 + 3]).toBe(255);
+  await page.goto("/coaching");
+  const sourcePaths: string[] = [];
+  for (const scope of [
+    page.getByRole("banner"),
+    page.getByRole("contentinfo"),
+  ]) {
+    const link = scope.getByRole("link", { name: "VFN — Home" });
+    const image = link.getByRole("img", {
+      name: "VFN silver V-and-panther emblem",
+    });
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate((element: HTMLImageElement) => element.decode());
+    await expect(image).toBeVisible();
+    await expect(image).toHaveCSS("mix-blend-mode", "normal");
+    await expect(image).toHaveCSS("filter", "none");
+    expect(await link.textContent()).toBe("");
+    sourcePaths.push(
+      new URL(
+        await image.evaluate((element: HTMLImageElement) => element.currentSrc),
+      ).searchParams.get("url")!,
+    );
+    expect(
+      await image.evaluate(
+        (element: HTMLImageElement) => element.width === element.height,
+      ),
+    ).toBe(true);
+  }
+  expect(sourcePaths).toEqual([
+    "/images/vfn-emblem-transparent.png",
+    "/images/vfn-emblem-transparent.png",
+  ]);
+  await expect(page.getByRole("contentinfo")).toContainText(
+    "1% Better Everyday.",
+  );
+  await page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "VFN — Home" })
+    .click();
+  await expect(page).toHaveURL("/");
 });

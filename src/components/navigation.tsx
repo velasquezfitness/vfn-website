@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
+import { Emblem } from "./emblem";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { Arrow } from "./brand";
@@ -23,15 +23,7 @@ export function Navigation() {
           aria-label="VFN — Home"
           onClick={() => setOpen(false)}
         >
-          <Image
-            src="/images/Metallic%20Panther%20V%20Emblem.png"
-            alt="VFN silver V-and-panther emblem"
-            width={72}
-            height={72}
-            sizes="(max-width: 700px) 64px, 72px"
-            loading="eager"
-            className="header-emblem"
-          />
+          <Emblem placement="header" />
         </Link>
         <button
           ref={button}

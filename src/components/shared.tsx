@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Emblem } from "./emblem";
 import { Arrow } from "./brand";
 export function ApplyCTA() {
   return (
@@ -27,8 +28,8 @@ export function Footer() {
   return (
     <footer className="site-footer container">
       <div className="footer-top">
-        <Link href="/" className="wordmark" aria-label="VFN — Home">
-          VFN<span>VELASQUEZ FITNESS & NUTRITION</span>
+        <Link href="/" className="footer-brand" aria-label="VFN — Home">
+          <Emblem placement="footer" />
         </Link>
         <p className="footer-philosophy">1% Better Everyday.</p>
         <nav aria-label="Footer navigation">

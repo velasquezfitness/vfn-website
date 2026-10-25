@@ -52,7 +52,8 @@ Commit `b688f8d` connects the exact founder-supplied assets:
 - `public/images/VFN-Kettlebell-Hero (1).jpg`: homepage founder section and Coaching page.
 - `public/images/Arise Professional -65.JPG`: homepage hero and About page.
 - `public/images/IMG_0825.JPG`: approved replacement for The 1% Method section, contained without cropping or color filters.
-- `public/images/Metallic Panther V Emblem.png`: silver emblem used alone in the header, optimized responsively with its original proportions. Its black canvas is blended with the header through CSS; the original file is unchanged.
+- `public/images/Metallic Panther V Emblem.png`: unchanged approved source emblem.
+- `public/images/vfn-emblem-transparent.png`: shared header/footer cutout with real alpha transparency. Source RGB pixels and original dimensions are unchanged; only the surrounding background is removed from its alpha channel. No CSS blending or filters are used.
 
 The original files remain unchanged. `next/image` provides responsive, optimized delivery; filenames with spaces and uppercase extensions are URL-encoded. The hero is contained on desktop to preserve the full photograph; mobile places the image above the text so the founder is not obscured. Browser tests verify decoded images, correct source mapping, successful optimizer responses, and absence of missing-asset placeholders at every placement.
 
@@ -76,6 +77,6 @@ No destination or credentials have been guessed, and no unused backend has been 
 
 The homepage uses the professional portrait in the hero and the kettlebell photograph in the founder section. Portrait and training photography receive `grayscale(1) contrast(1.04)` through CSS only; original files are unchanged. The Coaching page compares VFN Method (eight-week, one-time PDF program, no ongoing support), VFN Coaching (biweekly check-ins), and VFN Performance (weekly check-ins, technique reviews, priority support). No provisional prices, checkout, subscriptions, or payment backend are enabled.
 
-Both approved replacement assets arrived in commit `efed635` and are integrated. The header shows only the exact silver V-and-panther PNG, with no adjacent text; the footer identity is unchanged. The new panther preserves its original black background and golden eyes. Existing original image files remain unmodified.
+Both approved replacement assets arrived in commit `efed635` and are integrated. The header and footer show the same transparent silver V-and-panther emblem, without adjacent brand-name text. Footer links, philosophy, and layout are preserved. The new panther preserves its original black background and golden eyes. Existing original image files remain unmodified.
 
 For an existing GitHub Codespace, switch to `feat/vfn-editorial-redesign`, pull the latest branch changes, run `npm ci` if dependencies are missing, and run `npm run dev -- --hostname 0.0.0.0 --port 3000`. In the **Ports** tab, open port **3000** in the browser. Keep port visibility private; no public deployment is needed.
