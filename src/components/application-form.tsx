@@ -172,8 +172,7 @@ export function ApplicationForm() {
       <label className="checkbox-label">
         <input type="checkbox" required name="adult" />
         <span>
-          I confirm I am 18 or older and understand this preview does not send
-          an application. See the privacy and application status below.
+          I confirm I am 18 or older and agree to submit my application for VFN to review. See the privacy notice below.
         </span>
       </label>
       <button type="submit" disabled={status === "sending"} className="button" aria-describedby="availability">
