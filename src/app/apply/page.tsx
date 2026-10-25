@@ -4,7 +4,7 @@ import { ApplicationForm } from "@/components/application-form";
 export const metadata: Metadata = {
   title: "Apply for Coaching",
   description:
-    "Start with your goals. Explore the coaching application for Velasquez Fitness & Nutrition. Application delivery is not yet enabled.",
+    "Start with your goals. Apply for individualized coaching with Velasquez Fitness & Nutrition.",
 };
 export default function Apply() {
   return (
@@ -28,7 +28,7 @@ export default function Apply() {
             coaching conversation, not a commitment to a package or a payment.
           </p>
           <p>
-            Once applications open, the next step is to discuss your goals,
+            After you apply, the next step is to discuss your goals,
             coaching fit, support expectations, and availability.
           </p>
           <p className="small">
