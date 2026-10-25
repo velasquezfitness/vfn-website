@@ -1,33 +1,32 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/shared";
 export const metadata: Metadata = {
-  title: "Privacy & Application Status",
+  title: "Privacy Notice",
   description:
-    "How this VFN website currently handles coaching application information. Application delivery and storage are not enabled.",
+    "How VFN coaching applications are submitted and handled.",
 };
 export default function Privacy() {
   return (
     <main id="main">
       <PageIntro
-        label="PRIVACY & APPLICATION STATUS"
+        label="PRIVACY NOTICE"
         title="Clarity about"
         accent="your information."
-        description="The coaching application is currently a preview. It does not send or save your entries."
+        description="Learn how your coaching application information is handled."
       />
       <section className="container privacy-copy">
-        <h2>The current form</h2>
+        <h2>Coaching applications</h2>
         <p>
-          Field checks run in your browser. No submission endpoint, application
-          database, payment system, or analytics service has been integrated
-          into this site. Information typed into the preview form is not sent by
-          the form or intentionally persisted by this application.
+          When you submit the coaching application, the details you enter are sent
+          through Formspree, a third-party form processing service, so VFN can
+          review your request and contact you at the email address you provide.
+          Formspree processes and may retain submissions according to its own
+          policies. Please review <a href="https://formspree.io/legal/privacy-policy/" className="text-link">Formspree’s privacy policy</a>.
         </p>
-        <h2>Before applications open</h2>
         <p>
-          VFN must approve a delivery provider, recipient, retention policy, and
-          privacy notice before accepting applications. This page will be
-          updated to explain that process and provide an appropriate privacy
-          contact.
+          VFN uses application information to evaluate coaching fit and follow up
+          about coaching services. For questions about your application or to
+          request deletion, contact <a className="text-link" href="mailto:velasquezfitnesspr@gmail.com">velasquezfitnesspr@gmail.com</a>.
         </p>
         <h2>Information to leave out</h2>
         <p>
