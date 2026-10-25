@@ -1,32 +1,37 @@
 "use client";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useRef, useState } from "react";
 import { Arrow } from "@/components/brand";
-const subscribe = () => () => {};
+
 export function ApplicationForm() {
-  const hydrated = useSyncExternalStore(
-    subscribe,
-    () => true,
-    () => false,
-  );
-  const [checked, setChecked] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const notice = useRef<HTMLDivElement>(null);
   return (
     <form
       className="application-form"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        setChecked(true);
+        if (status === "sending") return;
+        const formElement = e.currentTarget;
+        setStatus("sending");
+        try {
+          const response = await fetch("https://formspree.io/f/mdeeeown", {
+            method: "POST",
+            body: new FormData(formElement),
+            headers: { Accept: "application/json" },
+          });
+          if (!response.ok) throw new Error("Submission failed");
+          formElement.reset();
+          setStatus("success");
+        } catch {
+          setStatus("error");
+        }
         requestAnimationFrame(() => notice.current?.focus());
       }}
-      onChange={() => setChecked(false)}
+      onChange={() => { if (status !== "sending") setStatus("idle"); }}
     >
       <div className="form-notice" id="availability">
-        <strong>Applications are not open yet.</strong>
-        <p>
-          You can explore and check this form, but nothing will be sent or
-          saved. Submission will be enabled once VFN confirms a secure delivery
-          destination.
-        </p>
+        <strong>Apply for VFN coaching.</strong>
+        <p>Complete the form below. We’ll review your application and follow up by email.</p>
       </div>
       <p className="small muted">
         All fields are required unless marked optional. Please do not include
@@ -171,45 +176,24 @@ export function ApplicationForm() {
           an application. See the privacy and application status below.
         </span>
       </label>
-      <button
-        type="submit"
-        disabled={!hydrated}
-        className="button"
-        aria-describedby="availability"
-      >
-        Check application <Arrow />
-      </button>
-      <button type="button" className="button submit-disabled" disabled>
-        Submit application — unavailable
+      <button type="submit" disabled={status === "sending"} className="button" aria-describedby="availability">
+        {status === "sending" ? "Sending application…" : "Submit application"} <Arrow />
       </button>
       <div
         ref={notice}
         tabIndex={-1}
         role="status"
-        className={checked ? "form-result" : "sr-only"}
+        className={status === "success" || status === "error" ? "form-result" : "sr-only"}
       >
-        {checked && (
-          <>
-            <strong>Your form passes the field checks.</strong>
-            <p>
-              This is not a submitted application. Nothing has been sent or
-              saved. VFN must enable secure delivery before applications can be
-              accepted.
-            </p>
-          </>
-        )}
+        {status === "success" && <><strong>Application sent.</strong><p>Thank you for applying. VFN will review your details and contact you by email.</p></>}
+        {status === "error" && <><strong>We couldn’t send your application.</strong><p>Please try again in a moment. Your application has not been confirmed.</p></>}
       </div>
       <p className="small muted">
         <a className="text-link" href="/privacy">
-          Privacy &amp; application status
+          Privacy notice
         </a>
       </p>
-      <noscript>
-        <p className="form-notice">
-          Form checking requires JavaScript. Submission is unavailable; no
-          application will be sent.
-        </p>
-      </noscript>
+      <noscript><p className="form-notice">JavaScript is required to submit this application.</p></noscript>
     </form>
   );
 }
