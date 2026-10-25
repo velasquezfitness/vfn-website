@@ -97,36 +97,10 @@ export default function Home() {
           </ol>
         </div>
       </section>
-      <section className="section container results">
-        <div className="section-heading">
-          <p className="eyebrow">03 / THE WORK, IN PRACTICE</p>
-          <h2>
-            Progress has
-            <br />
-            <em>a personal definition.</em>
-          </h2>
-        </div>
-        <div className="results-placeholder">
-          <span className="eyebrow">CLIENT JOURNAL / FORTHCOMING</span>
-          <p>
-            A space for real stories.
-            <br />
-            <em>Shared with permission.</em>
-          </p>
-          <div>
-            <span>
-              Approved client results and stories have not yet been supplied.
-            </span>
-            <span>
-              No testimonials or performance claims are represented here.
-            </span>
-          </div>
-        </div>
-      </section>
       <section className="practice-section">
         <div className="container practice-inner">
           <div>
-            <p className="eyebrow">04 / THE PRACTICE</p>
+            <p className="eyebrow">03 / THE PRACTICE</p>
             <h2>
               Personal coaching.
               <br />
@@ -173,7 +147,7 @@ export default function Home() {
       <section className="section container founder-section">
         <BrandPhoto kind="kettlebells" />
         <div className="founder-copy">
-          <p className="eyebrow">05 / MEET THE FOUNDER</p>
+          <p className="eyebrow">04 / MEET THE FOUNDER</p>
           <h2>
             Serious about training.
             <br />
