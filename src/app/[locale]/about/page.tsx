@@ -1,3 +1,4 @@
+import { BrandCopy } from "@/components/brand-copy";
 import { getTranslator, type LocalePageProps } from "@/i18n/locale";
 import { getPageLocale, pageMetadata } from "@/i18n/server";
 
@@ -52,16 +53,21 @@ export default async function About({ params }: LocalePageProps) {
       </section>
       <section className="about-philosophy">
         <div className="container">
-          <p className="eyebrow">{t("1% BETTER EVERYDAY")}</p>
+          <p className="eyebrow">
+            <BrandCopy locale={locale} source={"1% BETTER EVERYDAY"} />
+          </p>
           <h2>
             {t("Not a demand for perfection.")} <br />
             <em>{t("A practice of paying attention.")}</em>
           </h2>
           <div className="belief-copy">
             <p>
-              {t(
-                "As a framework for training, the 1% Method brings together understanding, structure, consistent execution, and thoughtful feedback.",
-              )}{" "}
+              <BrandCopy
+                locale={locale}
+                source={
+                  "As a framework for training, the 1% Method brings together understanding, structure, consistent execution, and thoughtful feedback."
+                }
+              />{" "}
             </p>
             <p>
               {t(

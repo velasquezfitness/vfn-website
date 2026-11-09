@@ -1,3 +1,4 @@
+import { BrandCopy } from "@/components/brand-copy";
 import { getTranslator, localizedPath, type Locale } from "@/i18n/locale";
 import Link from "next/link";
 import { Emblem } from "./emblem";
@@ -37,7 +38,9 @@ export function Footer({ locale }: { locale: Locale }) {
         >
           <Emblem placement="footer" locale={locale} />
         </Link>
-        <p className="footer-philosophy">{t("1% Better Everyday.")}</p>
+        <p className="footer-philosophy">
+          <BrandCopy locale={locale} source={"1% Better Everyday."} />
+        </p>
         <nav aria-label={t("Footer navigation")}>
           <Link href={localizedPath(locale, "/coaching")}>{t("Coaching")}</Link>
           <Link href={localizedPath(locale, "/about")}>{t("About")}</Link>

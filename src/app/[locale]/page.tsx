@@ -1,3 +1,4 @@
+import { BrandCopy } from "@/components/brand-copy";
 import {
   getTranslator,
   localizedPath,
@@ -24,13 +25,16 @@ export default async function Home({ params }: LocalePageProps) {
         />
         <div className="container hero-inner">
           <div className="hero-copy">
-            <p className="eyebrow">{t("THE 1% METHOD™")}</p>
+            <p className="eyebrow">
+              <BrandCopy locale={locale} source={"THE 1% METHOD™"} />
+            </p>
             <h1>
               {t("Self-Mastery Is")} <br />
               {t("the Destination.")}{" "}
             </h1>
             <p className="hero-subtitle">
-              {t("1% Better Every Day")} <br />
+              <BrandCopy locale={locale} source={"1% Better Every Day"} />{" "}
+              <br />
               {t("is the process.")}{" "}
             </p>
             <div className="hero-actions">
@@ -38,7 +42,8 @@ export default async function Home({ params }: LocalePageProps) {
                 {t("Apply for coaching")} <Arrow />
               </Link>
               <a href="#method" className="text-link">
-                {t("Explore the method")} <span aria-hidden="true">↓</span>
+                <BrandCopy locale={locale} source="Explore the method" />{" "}
+                <span aria-hidden="true">↓</span>
               </a>
             </div>
           </div>
@@ -81,7 +86,9 @@ export default async function Home({ params }: LocalePageProps) {
           </div>
         </div>
         <div className="method-content">
-          <p className="eyebrow">{t("02 / THE 1% METHOD")}</p>
+          <p className="eyebrow">
+            <BrandCopy locale={locale} source={"02 / THE 1% METHOD"} />
+          </p>
           <h2>
             {t("A Process.")} <br />
             <em>{t("Not a Shortcut.")}</em>

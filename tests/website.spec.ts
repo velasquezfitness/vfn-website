@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import sharp from "sharp";
 import spanish from "../src/i18n/es.json";
+import { getTranslator } from "../src/i18n/locale";
 
 test("all pages render with metadata, working links, and no horizontal overflow", async ({
   page,
@@ -661,4 +662,96 @@ test("English remains the default regardless of browser language and internal al
   await expect(
     page.getByRole("link", { name: "Volver al inicio" }),
   ).toBeVisible();
+});
+
+test("approved Spanish headlines and exact English brand phrases are retained", async ({
+  page,
+}) => {
+  await page.goto("/es");
+  const normalized = (text: string) => text.replace(/\s+/g, " ").trim();
+  for (const [selector, expected] of [
+    ["h1", "El objetivo es superar tus propios límites."],
+    [
+      ".belief h2",
+      "El progreso es el resultado de lo que haces consistentemente.",
+    ],
+    [".method-content h2", "Los resultados toman tiempo. El proceso importa."],
+    [".practice-inner h2", "Entrenamiento personalizado. De verdad."],
+    [".closing-inner h2", "Un plan diseñado para ti y tus metas."],
+  ])
+    expect(normalized(await page.locator(selector).innerText())).toBe(expected);
+  await expect(
+    page.getByRole("heading", {
+      name: "Seguimiento en cada etapa.",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "Un programa que evoluciona contigo.",
+      exact: true,
+    }),
+  ).toBeVisible();
+  for (const path of [
+    "/es",
+    "/es/coaching",
+    "/es/about",
+    "/es/apply",
+    "/es/privacy",
+  ]) {
+    await page.goto(path);
+    const content = await page.locator("body").innerText();
+    expect(content).not.toMatch(/m[eé]todo del 1%|1% mejor cada d[ií]a/i);
+    await expect(page.locator(".footer-philosophy")).toHaveText(
+      "1% Better Everyday",
+    );
+    for (const selector of [
+      'meta[name="description"]',
+      'meta[property="og:title"]',
+      'meta[property="og:description"]',
+      'meta[name="twitter:title"]',
+      'meta[name="twitter:description"]',
+    ]) {
+      expect(await page.locator(selector).getAttribute("content")).not.toMatch(
+        /m[eé]todo del 1%|1% mejor cada d[ií]a/i,
+      );
+    }
+    for (const span of await page.locator('span[translate="no"]').all()) {
+      await expect(span).toHaveAttribute("lang", "en");
+      await expect(span).toHaveCSS("text-transform", "none");
+      expect(["The 1% Method™", "1% Better Everyday"]).toContain(
+        await span.textContent(),
+      );
+    }
+    if (path === "/es") {
+      await expect(page).toHaveTitle("The 1% Method™ | VFN");
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        "content",
+        /1% Better Everyday\./,
+      );
+      await expect(page.locator(".hero-copy .eyebrow")).toHaveText(
+        "The 1% Method™",
+      );
+      await expect(page.locator("#method .eyebrow")).toHaveText(
+        "02 / The 1% Method™",
+      );
+      await expect(
+        page.getByRole("link", { name: "Conoce The 1% Method™" }),
+      ).toBeVisible();
+    }
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+  await page.goto("/es/coaching");
+  expect(normalized(await page.locator("h1").innerText())).toBe(
+    "Un plan diseñado para ti y tus metas.",
+  );
+});
+
+test("Spanish copy revisions leave all English translation values unchanged", () => {
+  for (const key of Object.keys(spanish))
+    expect(getTranslator("en")(key)).toBe(key);
 });
