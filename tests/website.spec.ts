@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import sharp from "sharp";
 
 test("all pages render with metadata, working links, and no horizontal overflow", async ({
@@ -53,57 +53,125 @@ test("navigation supports mobile disclosure, Escape, and route changes", async (
   if (isMobile) await expect(nav).toBeHidden();
 });
 
-test("application validates fields without sending or claiming submission", async ({
+// Block the real provider in every test, even if a test accidentally submits.
+test.beforeEach(async ({ page }) => {
+  await page.route("https://formspree.io/**", (route) => route.abort());
+});
+
+async function fillApplication(page: Page) {
+  await page.locator('[name="name"]').fill("Test Applicant");
+  await page.locator('[name="email"]').fill("test@example.com");
+  await page.locator('[name="location"]').fill("San Juan / AST");
+  for (const name of [
+    "primaryGoal",
+    "format",
+    "experience",
+    "days",
+    "equipment",
+  ]) {
+    await page.locator(`[name="${name}"]`).selectOption({ index: 1 });
+  }
+  await page
+    .locator('[name="goals"]')
+    .fill("Build a consistent strength training routine.");
+  await page.getByRole("checkbox").check();
+}
+
+test("application validation prevents invalid submissions", async ({
   page,
 }) => {
-  await page.goto("/apply");
-  const requests: string[] = [];
-  page.on("request", (r) => {
-    if (r.method() === "POST" || r.url().includes("?name="))
-      requests.push(r.url());
+  let requests = 0;
+  await page.route("https://formspree.io/**", (route) => {
+    requests++;
+    return route.abort();
   });
-  await expect(page.getByText("Applications are not open yet.")).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "Submit application — unavailable" }),
-  ).toBeDisabled();
-  await page.getByRole("button", { name: "Check application" }).click();
+  await page.goto("/apply");
+  await page.getByRole("button", { name: "Submit application" }).click();
   expect(
     await page
       .locator("form")
-      .evaluate((f: HTMLFormElement) => f.checkValidity()),
+      .evaluate((form: HTMLFormElement) => form.checkValidity()),
   ).toBe(false);
-  await page.getByLabel("Full name").fill("Test Applicant");
-  await page.getByLabel("Email address").fill("invalid-email");
-  await page.getByLabel("Where are you based?").fill("San Juan / AST");
-  await page.getByLabel("Training experience").selectOption({ index: 1 });
-  await page.getByLabel("Primary fitness goal").selectOption({ index: 1 });
-  await page.getByLabel("Preferred coaching format").selectOption({ index: 1 });
-  await page
-    .getByLabel("What do you want to work toward?")
-    .fill("Build a consistent strength training routine.");
-  await page
-    .getByLabel("Current training frequency")
-    .selectOption({ index: 2 });
-  await page.getByLabel("Equipment access").selectOption({ index: 1 });
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Check application" }).click();
+  await fillApplication(page);
+  await page.locator('[name="email"]').fill("invalid-email");
+  await page.getByRole("button", { name: "Submit application" }).click();
   expect(
     await page
-      .getByLabel("Email address")
-      .evaluate((e: HTMLInputElement) => e.validity.typeMismatch),
+      .locator('[name="email"]')
+      .evaluate((input: HTMLInputElement) => input.validity.typeMismatch),
   ).toBe(true);
-  await page.getByLabel("Email address").fill("test@example.com");
-  await page.getByRole("button", { name: "Check application" }).click();
-  await expect(page.getByRole("status")).toContainText(
-    "This is not a submitted application",
-  );
-  await expect(page.getByRole("status")).toBeFocused();
-  expect(requests).toEqual([]);
-  await page.getByLabel("Full name").fill("Edited Name");
-  await expect(
-    page.getByText("Your form passes the field checks."),
-  ).toHaveCount(0);
+  expect(requests).toBe(0);
 });
+
+test("mocked Formspree success sends fields once, disables sending, and resets", async ({
+  page,
+}) => {
+  let requests = 0;
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("https://formspree.io/f/mdeeeown", async (route) => {
+    requests++;
+    expect(route.request().method()).toBe("POST");
+    expect(route.request().postData()).toContain("test@example.com");
+    await gate;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true }),
+    });
+  });
+  await page.goto("/apply");
+  await fillApplication(page);
+  await page.getByRole("button", { name: "Submit application" }).click();
+  await expect(
+    page.getByRole("button", { name: "Sending application…" }),
+  ).toBeDisabled();
+  expect(requests).toBe(1);
+  release();
+  await expect(page.getByRole("status")).toContainText("Application sent.");
+  await expect(page.getByRole("status")).toBeFocused();
+  await expect(page.locator('[name="name"]')).toHaveValue("");
+  await expect(page.getByRole("checkbox")).not.toBeChecked();
+});
+
+for (const failure of ["provider", "network"] as const) {
+  test(`mocked Formspree ${failure} failure retains entries and permits retry`, async ({
+    page,
+  }) => {
+    let requests = 0;
+    await page.route("https://formspree.io/f/mdeeeown", (route) => {
+      requests++;
+      if (requests > 1)
+        return route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: '{"ok":true}',
+        });
+      return failure === "network"
+        ? route.abort()
+        : route.fulfill({
+            status: 500,
+            contentType: "application/json",
+            body: '{"error":"Unavailable"}',
+          });
+    });
+    await page.goto("/apply");
+    await fillApplication(page);
+    await page.getByRole("button", { name: "Submit application" }).click();
+    await expect(page.getByRole("status")).toContainText(
+      "We couldn’t send your application.",
+    );
+    await expect(page.locator('[name="email"]')).toHaveValue(
+      "test@example.com",
+    );
+    await expect(page.getByRole("status")).toBeFocused();
+    await page.getByRole("button", { name: "Submit application" }).click();
+    await expect(page.getByRole("status")).toContainText("Application sent.");
+    expect(requests).toBe(2);
+  });
+}
 
 test("coaching FAQs expand with keyboard and unknown routes return 404", async ({
   page,
@@ -129,11 +197,7 @@ test("method anchor, founder background, and honest results placeholder", async 
       page.getByRole("heading", { name: stage, exact: true }),
     ).toBeVisible();
   }
-  await expect(
-    page.getByText(
-      "Approved client results and stories have not yet been supplied.",
-    ),
-  ).toBeVisible();
+  await expect(page.locator(".results-placeholder")).toHaveCount(0);
   await page.getByRole("link", { name: "Meet your coach" }).click();
   await expect(page).toHaveURL(/\/about$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
@@ -264,8 +328,8 @@ test("coaching packages distinguish independent PDF training from ongoing suppor
   await coaching.getByRole("link", { name: "Apply for Coaching" }).click();
   await expect(page).toHaveURL(/\/apply$/);
   await expect(
-    page.getByRole("button", { name: "Submit application — unavailable" }),
-  ).toBeDisabled();
+    page.getByRole("button", { name: "Submit application" }),
+  ).toBeEnabled();
   await page.goto("/coaching");
   await performance
     .getByRole("link", { name: "Apply for Performance" })
