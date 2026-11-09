@@ -1,13 +1,45 @@
 "use client";
+import { getTranslator, localizedPath, type Locale } from "@/i18n/locale";
 import { useRef, useState } from "react";
 import { Arrow } from "@/components/brand";
 
-export function ApplicationForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+export function ApplicationForm({ locale = "en" }: { locale?: Locale }) {
+  const t = getTranslator(locale);
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
   const notice = useRef<HTMLDivElement>(null);
   return (
     <form
       className="application-form"
+      onInput={(event) => {
+        (event.target as HTMLInputElement).setCustomValidity?.("");
+      }}
+      onInvalid={(event) => {
+        const input = event.target as HTMLInputElement;
+        input.setCustomValidity("");
+        if (locale !== "es") return;
+        if (input.validity.valueMissing)
+          input.setCustomValidity(
+            t(
+              input.type === "checkbox"
+                ? "Please confirm your consent."
+                : input.tagName === "SELECT"
+                  ? "Please select an option."
+                  : "Please complete this field.",
+            ),
+          );
+        else if (input.validity.typeMismatch)
+          input.setCustomValidity(t("Please enter a valid email address."));
+        else if (input.validity.tooShort)
+          input.setCustomValidity(
+            t(
+              input.minLength === 20
+                ? "Please enter at least 20 characters."
+                : "Please enter at least 2 characters.",
+            ),
+          );
+      }}
       onSubmit={async (e) => {
         e.preventDefault();
         if (status === "sending") return;
@@ -27,23 +59,32 @@ export function ApplicationForm() {
         }
         requestAnimationFrame(() => notice.current?.focus());
       }}
-      onChange={() => { if (status !== "sending") setStatus("idle"); }}
+      onChange={() => {
+        if (status !== "sending") setStatus("idle");
+      }}
     >
+      <input type="hidden" name="language" value={locale} />
       <div className="form-notice" id="availability">
-        <strong>Apply for VFN coaching.</strong>
-        <p>Complete the form below. We’ll review your application and follow up by email.</p>
+        <strong>{t("Apply for VFN coaching.")}</strong>
+        <p>
+          {t(
+            "Complete the form below. We’ll review your application and follow up by email.",
+          )}
+        </p>
       </div>
       <p className="small muted">
-        All fields are required unless marked optional. Please do not include
-        medical records or sensitive health information.
+        {t(
+          "All fields are required unless marked optional. Please do not include medical records or sensitive health information.",
+        )}{" "}
       </p>
       <fieldset>
         <legend>
-          <span>01 /</span> Your details
+          <span>01 /</span>
+          {t("Your details")}{" "}
         </legend>
         <div className="field-grid">
           <label>
-            Full name
+            {t("Full name")}{" "}
             <input
               name="name"
               autoComplete="name"
@@ -53,7 +94,7 @@ export function ApplicationForm() {
             />
           </label>
           <label>
-            Email address
+            {t("Email address")}{" "}
             <input
               name="email"
               type="email"
@@ -64,11 +105,11 @@ export function ApplicationForm() {
           </label>
         </div>
         <label>
-          Where are you based?
+          {t("Where are you based?")}{" "}
           <input
             name="location"
             autoComplete="address-level2"
-            placeholder="City / time zone"
+            placeholder={t("City / time zone")}
             required
             maxLength={120}
           />
@@ -76,123 +117,184 @@ export function ApplicationForm() {
       </fieldset>
       <fieldset>
         <legend>
-          <span>02 /</span> Your starting point
+          <span>02 /</span>
+          {t("Your starting point")}{" "}
         </legend>
         <label>
-          Primary fitness goal
+          {t("Primary fitness goal")}{" "}
           <select name="primaryGoal" required defaultValue="">
             <option value="" disabled>
-              Select your main focus
+              {t("Select your main focus")}{" "}
             </option>
-            <option>Build strength</option>
-            <option>Improve athletic performance</option>
-            <option>Develop training consistency</option>
-            <option>General fitness</option>
-            <option>Other / to discuss</option>
+            <option value={"Build strength"}>{t("Build strength")}</option>
+            <option value={"Improve athletic performance"}>
+              {t("Improve athletic performance")}
+            </option>
+            <option value={"Develop training consistency"}>
+              {t("Develop training consistency")}
+            </option>
+            <option value={"General fitness"}>{t("General fitness")}</option>
+            <option value={"Other / to discuss"}>
+              {t("Other / to discuss")}
+            </option>
           </select>
         </label>
         <label>
-          Preferred coaching format
+          {t("Preferred coaching format")}{" "}
           <select name="format" required defaultValue="">
             <option value="" disabled>
-              Select a preference
+              {t("Select a preference")}{" "}
             </option>
-            <option>Online coaching</option>
-            <option>In person, if available</option>
-            <option>Open to discussing options</option>
+            <option value={"Online coaching"}>{t("Online coaching")}</option>
+            <option value={"In person, if available"}>
+              {t("In person, if available")}
+            </option>
+            <option value={"Open to discussing options"}>
+              {t("Open to discussing options")}
+            </option>
           </select>
           <span className="field-hint">
-            A preference is not confirmation of availability.
+            {t("A preference is not confirmation of availability.")}{" "}
           </span>
         </label>
         <label>
-          Training experience
+          {t("Training experience")}{" "}
           <select name="experience" required defaultValue="">
             <option value="" disabled>
-              Select your experience
+              {t("Select your experience")}{" "}
             </option>
-            <option>New to structured training</option>
-            <option>Some experience, building consistency</option>
-            <option>Experienced, ready for a new direction</option>
-            <option>Returning after time away</option>
+            <option value={"New to structured training"}>
+              {t("New to structured training")}
+            </option>
+            <option value={"Some experience, building consistency"}>
+              {t("Some experience, building consistency")}
+            </option>
+            <option value={"Experienced, ready for a new direction"}>
+              {t("Experienced, ready for a new direction")}
+            </option>
+            <option value={"Returning after time away"}>
+              {t("Returning after time away")}
+            </option>
           </select>
         </label>
         <label>
-          What do you want to work toward?
+          {t("What do you want to work toward?")}{" "}
           <textarea
             name="goals"
             required
             minLength={20}
             maxLength={2000}
             rows={4}
-            placeholder="Tell us about your goals and why they matter to you."
+            placeholder={t(
+              "Tell us about your goals and why they matter to you.",
+            )}
             aria-describedby="goals-help"
           />
           <span id="goals-help" className="field-hint">
-            20–2,000 characters. Focus on your training goals.
+            {t("20–2,000 characters. Focus on your training goals.")}{" "}
           </span>
         </label>
         <div className="field-grid">
           <label>
-            Current training frequency
+            {t("Current training frequency")}{" "}
             <select name="days" required defaultValue="">
               <option value="" disabled>
-                Select current frequency
+                {t("Select current frequency")}{" "}
               </option>
-              <option>Not currently training</option>
-              <option>1–2 days</option>
-              <option>3–4 days</option>
-              <option>5+ days</option>
-              <option>Not sure yet</option>
+              <option value={"Not currently training"}>
+                {t("Not currently training")}
+              </option>
+              <option value={"1–2 days"}>{t("1–2 days")}</option>
+              <option value={"3–4 days"}>{t("3–4 days")}</option>
+              <option value={"5+ days"}>{t("5+ days")}</option>
+              <option value={"Not sure yet"}>{t("Not sure yet")}</option>
             </select>
           </label>
           <label>
-            Equipment access
+            {t("Equipment access")}{" "}
             <select name="equipment" required defaultValue="">
               <option value="" disabled>
-                Select equipment
+                {t("Select equipment")}{" "}
               </option>
-              <option>Full gym</option>
-              <option>Home equipment</option>
-              <option>Bodyweight only</option>
-              <option>Other / to discuss</option>
+              <option value={"Full gym"}>{t("Full gym")}</option>
+              <option value={"Home equipment"}>{t("Home equipment")}</option>
+              <option value={"Bodyweight only"}>{t("Bodyweight only")}</option>
+              <option value={"Other / to discuss"}>
+                {t("Other / to discuss")}
+              </option>
             </select>
           </label>
         </div>
         <label>
-          Anything else? <span className="muted">(optional)</span>
+          {t("Anything else?")} <span className="muted">{t("(optional)")}</span>
           <textarea
             name="notes"
             maxLength={1000}
             rows={3}
-            placeholder="Schedule, preferences, or questions about coaching."
+            placeholder={t(
+              "Schedule, preferences, or questions about coaching.",
+            )}
           />
         </label>
       </fieldset>
       <label className="checkbox-label">
         <input type="checkbox" required name="adult" />
         <span>
-          I confirm I am 18 or older and agree to submit my application for VFN to review. See the privacy notice below.
+          {t(
+            "I confirm I am 18 or older and agree to submit my application for VFN to review. See the privacy notice below.",
+          )}{" "}
         </span>
       </label>
-      <button type="submit" disabled={status === "sending"} className="button" aria-describedby="availability">
-        {status === "sending" ? "Sending application…" : "Submit application"} <Arrow />
+      <button
+        type="submit"
+        disabled={status === "sending"}
+        className="button"
+        aria-describedby="availability"
+      >
+        {status === "sending"
+          ? t("Sending application…")
+          : t("Submit application")}{" "}
+        <Arrow />
       </button>
       <div
         ref={notice}
         tabIndex={-1}
         role="status"
-        className={status === "success" || status === "error" ? "form-result" : "sr-only"}
+        className={
+          status === "success" || status === "error" ? "form-result" : "sr-only"
+        }
       >
-        {status === "success" && <><strong>Application sent.</strong><p>Thank you for applying. VFN will review your details and contact you by email.</p></>}
-        {status === "error" && <><strong>We couldn’t send your application.</strong><p>Please try again in a moment. Your application has not been confirmed.</p></>}
+        {status === "success" && (
+          <>
+            <strong>{t("Application sent.")}</strong>
+            <p>
+              {t(
+                "Thank you for applying. VFN will review your details and contact you by email.",
+              )}
+            </p>
+          </>
+        )}
+        {status === "error" && (
+          <>
+            <strong>{t("We couldn’t send your application.")}</strong>
+            <p>
+              {t(
+                "Please try again in a moment. Your application has not been confirmed.",
+              )}
+            </p>
+          </>
+        )}
       </div>
       <p className="small muted">
-        <a className="text-link" href="/privacy">
-          Privacy notice
+        <a className="text-link" href={localizedPath(locale, "/privacy")}>
+          {t("Privacy notice")}{" "}
         </a>
       </p>
-      <noscript><p className="form-notice">JavaScript is required to submit this application.</p></noscript>
+      <noscript>
+        <p className="form-notice">
+          {t("JavaScript is required to submit this application.")}
+        </p>
+      </noscript>
     </form>
   );
 }

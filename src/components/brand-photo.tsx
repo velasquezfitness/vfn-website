@@ -1,3 +1,4 @@
+import { getTranslator, type Locale } from "@/i18n/locale";
 import Image from "next/image";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -22,16 +23,19 @@ const photographs = {
 };
 export function BrandPhoto({
   kind,
+  locale = "en",
   className = "",
   priority = false,
   sizes = "(max-width: 700px) 100vw, 50vw",
 }: {
   kind: keyof typeof photographs;
+  locale?: Locale;
   className?: string;
   priority?: boolean;
   sizes?: string;
 }) {
   const photo = photographs[kind];
+  const t = getTranslator(locale);
   const available = existsSync(
     path.join(process.cwd(), "public", "images", photo.file),
   );
@@ -40,7 +44,7 @@ export function BrandPhoto({
       {available ? (
         <Image
           src={`/images/${encodeURIComponent(photo.file)}`}
-          alt={photo.alt}
+          alt={t(photo.alt)}
           fill
           sizes={sizes}
           preload={priority}
@@ -50,17 +54,17 @@ export function BrandPhoto({
         <div
           className="asset-placeholder"
           role="img"
-          aria-label={`${photo.label} — original file pending`}
+          aria-label={`${t(photo.label)} — ${t("Original image file pending")}`}
         >
           <span className="asset-index">
             VFN / IMAGE{" "}
             {kind === "kettlebells" ? "01" : kind === "panther" ? "02" : "03"}
           </span>
-          <p>{photo.label}</p>
+          <p>{t(photo.label)}</p>
           <span>
-            Original image file pending
+            {t("Original image file pending")}
             <br />
-            No substitute imagery used
+            {t("No substitute imagery used")}
           </span>
         </div>
       )}

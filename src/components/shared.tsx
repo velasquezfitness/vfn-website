@@ -1,47 +1,55 @@
+import { getTranslator, localizedPath, type Locale } from "@/i18n/locale";
 import Link from "next/link";
 import { Emblem } from "./emblem";
 import { Arrow } from "./brand";
-export function ApplyCTA() {
+export function ApplyCTA({ locale }: { locale: Locale }) {
+  const t = getTranslator(locale);
   return (
     <section className="closing-section">
       <div className="container closing-inner">
-        <p className="eyebrow">YOUR NEXT CHAPTER</p>
+        <p className="eyebrow">{t("YOUR NEXT CHAPTER")}</p>
         <h2>
-          Built around you.
-          <br />
-          <em>Designed for progress.</em>
+          {t("Built around you.")} <br />
+          <em>{t("Designed for progress.")}</em>
         </h2>
         <div className="closing-bottom">
           <p>
-            A thoughtful approach to training.
-            <br />A conversation about what comes next.
+            {t("A thoughtful approach to training.")} <br />
+            {t("A conversation about what comes next.")}{" "}
           </p>
-          <Link className="button" href="/apply">
-            Apply for coaching <Arrow />
+          <Link className="button" href={localizedPath(locale, "/apply")}>
+            {t("Apply for coaching")} <Arrow />
           </Link>
         </div>
       </div>
     </section>
   );
 }
-export function Footer() {
+export function Footer({ locale }: { locale: Locale }) {
+  const t = getTranslator(locale);
   return (
     <footer className="site-footer container">
       <div className="footer-top">
-        <Link href="/" className="footer-brand" aria-label="VFN — Home">
-          <Emblem placement="footer" />
+        <Link
+          href={localizedPath(locale, "/")}
+          className="footer-brand"
+          aria-label={t("VFN — Home")}
+        >
+          <Emblem placement="footer" locale={locale} />
         </Link>
-        <p className="footer-philosophy">1% Better Everyday.</p>
-        <nav aria-label="Footer navigation">
-          <Link href="/coaching">Coaching</Link>
-          <Link href="/about">About</Link>
-          <Link href="/apply">Apply</Link>
-          <Link href="/privacy">Privacy</Link>
+        <p className="footer-philosophy">{t("1% Better Everyday.")}</p>
+        <nav aria-label={t("Footer navigation")}>
+          <Link href={localizedPath(locale, "/coaching")}>{t("Coaching")}</Link>
+          <Link href={localizedPath(locale, "/about")}>{t("About")}</Link>
+          <Link href={localizedPath(locale, "/apply")}>{t("Apply")}</Link>
+          <Link href={localizedPath(locale, "/privacy")}>{t("Privacy")}</Link>
         </nav>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Velasquez Fitness & Nutrition</span>
-        <span>INDIVIDUAL BY DESIGN.</span>
+        <span>
+          © {new Date().getFullYear()} {t("Velasquez Fitness & Nutrition")}
+        </span>
+        <span>{t("INDIVIDUAL BY DESIGN.")}</span>
       </div>
     </footer>
   );
