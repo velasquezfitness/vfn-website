@@ -71,6 +71,20 @@ export function ApplicationForm({ locale = "en" }: { locale?: Locale }) {
             "Complete the form below. We’ll review your application and follow up by email.",
           )}
         </p>
+        {locale === "es" && (
+          <>
+            <p>
+              {t(
+                "Once I receive your information, I will email you to discuss the next steps.",
+              )}
+            </p>
+            <p>
+              {t(
+                "Completing this form does not commit you to hiring any service.",
+              )}
+            </p>
+          </>
+        )}
       </div>
       <p className="small muted">
         {t(

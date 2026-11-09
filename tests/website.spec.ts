@@ -755,3 +755,120 @@ test("Spanish copy revisions leave all English translation values unchanged", ()
   for (const key of Object.keys(spanish))
     expect(getTranslator("en")(key)).toBe(key);
 });
+
+test("Spanish application presents the approved personal copy and clear submit wording", async ({
+  page,
+}) => {
+  await page.goto("/es/apply");
+  const normalize = (text: string) => text.replace(/\s+/g, " ").trim();
+  expect(normalize(await page.locator("h1").innerText())).toBe(
+    "Hablemos de tus metas. El próximo paso comienza aquí.",
+  );
+  await expect(page.locator(".intro-copy")).toHaveText(
+    "Cuéntame qué te gustaría lograr y cómo puedo ayudarte a trabajar hacia esas metas.",
+  );
+  await expect(page.locator("aside .eyebrow")).toHaveText(
+    "PRIMERO, CONOZCÁMONOS",
+  );
+  expect(normalize(await page.locator("aside h2").innerText())).toBe(
+    "Quiero conocer tus metas.",
+  );
+  for (const text of [
+    "Si estás considerando comenzar a entrenar conmigo, este es el primer paso para conocer tus metas y encontrar el servicio adecuado para ti.",
+    "Una vez reciba tu información, me comunicaré contigo para conversar sobre tus objetivos, tu disponibilidad y cómo podemos trabajar juntos.",
+    "Completa este formulario para conocer un poco más sobre ti, tus metas y el tipo de entrenamiento que estás buscando.",
+    "Una vez reciba tu información, me comunicaré contigo por correo electrónico para conversar sobre los próximos pasos.",
+    "Completar este formulario no representa ningún compromiso de contratación.",
+  ])
+    await expect(page.getByText(text, { exact: true })).toBeVisible();
+  await expect(page.locator(".form-notice strong")).toHaveText(
+    "Comienza tu proceso con VFN.",
+  );
+  await expect(page.locator("fieldset legend").first()).toContainText(
+    "Información de contacto",
+  );
+  await expect(page.locator("fieldset legend").nth(1)).toContainText(
+    "Cuéntame un poco sobre ti",
+  );
+  for (const label of [
+    "¿En qué pueblo o ciudad resides?",
+    "¿Cuál es tu meta principal?",
+    "¿Qué modalidad de entrenamiento prefieres?",
+    "¿Cuánta experiencia tienes entrenando?",
+    "Cuéntame qué te gustaría lograr.",
+    "¿Hay algo más que deba saber?",
+  ])
+    await expect(page.getByLabel(label, { exact: false })).toBeVisible();
+  await expect(page.locator('[name="location"]')).toHaveAttribute(
+    "placeholder",
+    "Pueblo o ciudad",
+  );
+  await expect(
+    page.getByRole("button", { name: "Enviar solicitud", exact: true }),
+  ).toHaveAttribute("type", "submit");
+  expect(
+    await page
+      .getByRole("button", { name: "Enviar solicitud", exact: true })
+      .evaluate((el) => getComputedStyle(el).textTransform),
+  ).toBe("uppercase");
+  for (const link of await page
+    .getByRole("link", { name: "Comienza tu proceso", exact: true })
+    .all())
+    await expect(link).toHaveAttribute("href", "/es/apply");
+  await expect(page.locator("aside .small")).toContainText(
+    "No incluyas expedientes médicos ni información de salud confidencial.",
+  );
+  await expect(page.locator(".checkbox-label")).toContainText(
+    "autorizo a VFN a recibir y evaluar mi solicitud",
+  );
+});
+
+test("copy refinement retains identical fields, rules, and canonical options in both languages", async ({
+  page,
+}) => {
+  const contracts = [];
+  for (const route of ["/apply", "/es/apply"]) {
+    await page.goto(route);
+    contracts.push(
+      await page
+        .locator(
+          'form input:not([name="language"]), form select, form textarea',
+        )
+        .evaluateAll((elements) =>
+          elements.map((element) => {
+            const field = element as
+              HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+            return {
+              name: field.name,
+              type: field.type,
+              required: field.required,
+              minLength: field.getAttribute("minlength"),
+              maxLength: field.getAttribute("maxlength"),
+              autoComplete: field.getAttribute("autocomplete"),
+              options:
+                field.tagName === "SELECT"
+                  ? [...(field as HTMLSelectElement).options].map((option) => ({
+                      value: option.value,
+                      disabled: option.disabled,
+                    }))
+                  : null,
+            };
+          }),
+        ),
+    );
+  }
+  expect(contracts[1]).toEqual(contracts[0]);
+  expect(contracts[0].map((field) => field.name)).toEqual([
+    "name",
+    "email",
+    "location",
+    "primaryGoal",
+    "format",
+    "experience",
+    "goals",
+    "days",
+    "equipment",
+    "notes",
+    "adult",
+  ]);
+});
