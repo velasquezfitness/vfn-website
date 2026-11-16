@@ -1470,3 +1470,55 @@ textarea::placeholder {
   height: 56px;
   object-fit: contain;
 }
+
+/* Compact language navigation preserves the existing editorial header. */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.language-switcher {
+  display: flex;
+  align-items: center;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.language-switcher > span {
+  display: flex;
+  align-items: center;
+}
+.language-switcher a {
+  display: inline-flex;
+  min-height: 44px;
+  min-width: 28px;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+.language-switcher a[aria-current],
+.language-switcher a:hover {
+  color: var(--gold);
+}
+.language-divider {
+  color: #77756f;
+  margin-inline: 4px;
+}
+html[lang="es-PR"] .hero-copy h1 {
+  font-size: clamp(3.4rem, 5.5vw, 6.2rem);
+}
+@media (max-width: 700px) {
+  .header-inner {
+    gap: 16px;
+  }
+  .header-actions {
+    margin-left: auto;
+    gap: 10px;
+  }
+  .menu-toggle {
+    order: 3;
+  }
+  html[lang="es-PR"] .hero-copy h1 {
+    font-size: clamp(3rem, 11.4vw, 4.5rem);
+  }
+}
